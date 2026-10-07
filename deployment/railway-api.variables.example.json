@@ -1,0 +1,16 @@
+{
+  "DATABASE_URL": "${{Postgres.DATABASE_URL}}",
+  "CORS_ORIGINS": "",
+  "EVENT_SLUG": "pedro-1-ano",
+  "EVENT_NAME": "Pedro",
+  "EVENT_AGE": "1",
+  "EVENT_DATE": "2026-12-05",
+  "EVENT_TIME": "15:00",
+  "EVENT_LOCATION": "Espaço Quintal",
+  "EVENT_ADDRESS": "Rua das Acácias, 120",
+  "EVENT_CITY": "São Paulo, SP",
+  "EVENT_RSVP_DEADLINE": "2026-11-20",
+  "EVENT_MESSAGE": "Um ano inteiro de descobertas, abraços e alegria. Vamos celebrar esse dia bonito juntos?",
+  "RSVP_RATE_LIMIT_MAX_REQUESTS": "10",
+  "RSVP_RATE_LIMIT_WINDOW_SECONDS": "600"
+}
