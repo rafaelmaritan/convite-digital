@@ -21,6 +21,8 @@ Railway e Cloudflare Pages precisam de um repositório Git remoto para fazer dep
 3. O serviço usa [railway.toml](../backend/railway.toml) para instalar dependências, iniciar Uvicorn na porta fornecida pelo Railway e verificar `/api/health`.
 4. Configure as variáveis do serviço da API:
 
+   O exemplo [railway-api.variables.example.json](railway-api.variables.example.json) pode ser colado no **RAW Editor** da aba Variables. Antes de aplicar, ajuste o nome do serviço PostgreSQL na referência `${{Postgres.DATABASE_URL}}` e substitua localização, endereço, cidade e prazo pelos dados reais. `CORS_ORIGINS` está vazio de propósito até o domínio Cloudflare Pages existir.
+
 | Variável | Valor inicial |
 | --- | --- |
 | `DATABASE_URL` | Referência do serviço PostgreSQL, normalmente `${{Postgres.DATABASE_URL}}` (ajuste o nome ao serviço criado) |
@@ -37,7 +39,7 @@ Railway e Cloudflare Pages precisam de um repositório Git remoto para fazer dep
 | `RSVP_RATE_LIMIT_MAX_REQUESTS` | `10` |
 | `RSVP_RATE_LIMIT_WINDOW_SECONDS` | `600` |
 
-5. Faça o deploy, gere um domínio público Railway e confirme `https://<domínio>/api/health` retorna `{"status":"ok"}`.
+5. A API já está publicada em `https://convite-digital-production.up.railway.app`; o health check foi validado com `200 OK` em `https://convite-digital-production.up.railway.app/api/health`.
 
 Railway fornece um valor padrão para `PORT`; não crie esse segredo manualmente. A aplicação converte URLs PostgreSQL `postgres://`/`postgresql://` para o driver psycopg 3 declarado em `requirements.txt`.
 
@@ -51,7 +53,7 @@ Railway fornece um valor padrão para `PORT`; não crie esse segredo manualmente
 
 | Variável | Valor |
 | --- | --- |
-| `PUBLIC_API_BASE_URL` | URL HTTPS pública do serviço API Railway, sem caminho |
+| `PUBLIC_API_BASE_URL` | `https://convite-digital-production.up.railway.app` |
 | `EVENT_SLUG` | Mesmo slug configurado na API |
 | `EVENT_RSVP_DEADLINE` | Mesma data limite configurada na API |
 | `EVENT_LOCATION` | Mesmo nome do local da API |
