@@ -1,0 +1,10 @@
+.venv/
+**/__pycache__/
+**/*.py[cod]
+.pytest_cache/
+**/.pytest_cache/
+backend/rsvps.sqlite3
+deployment/dist/
+.env
+.env.*
+!.env.example
