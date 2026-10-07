@@ -3,182 +3,122 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f5f0e8" />
+    <meta name="theme-color" content="#FDFBF6" />
     <meta
       name="description"
-      content="Convite digital do aniversário de 1 ano do Pedro."
+      content="Pedro faz 1 ano. Confirme sua presença para comemorar com a gente."
     />
-    <title>Pedro faz 1 | Um dia para guardar</title>
+    <title>Pedro · 1 ano</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="invitation">
-      <header class="hero" id="top">
-        <div class="hero__sun" aria-hidden="true"></div>
-        <div class="hero__inner">
-          <div class="hero__visual">
-            <div class="photo-frame">
-              <img
-                src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1100&q=88"
-                alt="Criança sorrindo ao ar livre"
-                width="900"
-                height="1125"
-                fetchpriority="high"
-              />
-              <div class="photo-stamp" aria-label="1 ano">
-                <span>01</span>
-                <small>ano</small>
-              </div>
-              <p class="photo-note">um dia<br />para guardar</p>
-            </div>
-          </div>
-
-          <div class="hero__copy">
-            <p class="eyebrow">convite digital <span aria-hidden="true">•</span> 05.12</p>
-            <h1>Pedro <em>faz</em><strong>1 ano</strong></h1>
-            <p class="hero__lead">
-              Um ano inteiro de descobertas, abraços e alegria. Vamos celebrar
-              esse dia bonito juntos?
-            </p>
-
-            <div class="hero__meta" aria-label="Resumo do evento">
-              <div>
-                <span class="meta-label">quando</span>
-                <strong>05 de dezembro</strong>
-                <small>sábado, às 15h</small>
-              </div>
-              <div>
-                <span class="meta-label">onde</span>
-                <strong class="event-location-city">São Paulo, SP</strong>
-                <small class="event-location-name">Espaço Quintal</small>
-              </div>
-            </div>
-
-            <a class="button button--primary" href="#rsvp">
-              Confirmar presença
-              <span class="button__icon" aria-hidden="true">↘</span>
-            </a>
-            <p class="hero__hint">Sua resposta ajuda a preparar essa tarde.</p>
-          </div>
+      <header class="hero" id="top" aria-labelledby="invitation-title">
+        <div class="hero__ornaments" aria-hidden="true">
+          <img class="hero-art hero-art--sprig" src="assets/decor/olive-sprig.png" alt="" />
+          <img class="hero-art hero-art--sun" src="assets/decor/sun.png" alt="" />
+          <img class="hero-art hero-art--cloud" src="assets/decor/cloud.png" alt="" />
+          <span class="ornament ornament--star ornament--star-one"></span>
+          <span class="ornament ornament--star ornament--star-two"></span>
         </div>
-        <div class="hero__leaf hero__leaf--one" aria-hidden="true"></div>
-        <div class="hero__leaf hero__leaf--two" aria-hidden="true"></div>
+
+        <div class="hero__inner">
+          <div class="hero__title">
+            <h1 id="invitation-title">
+              <span class="hero__name">PEDRO</span>
+              <span class="hero__age">1 <small>ANO</small></span>
+            </h1>
+          </div>
+
+          <div class="hero__portrait">
+            <img
+              class="hero__portrait-image"
+              src="assets/portrait-pedro.webp"
+              alt="Pedro olhando para cima, usando jardineira azul clara."
+              width="825"
+              height="1055"
+              fetchpriority="high"
+            />
+          </div>
+
+          <p class="hero__message">
+            Nosso pequeno grande motivo de alegria está fazendo 1 ano!
+          </p>
+
+          <div class="hero__characters" role="group" aria-label="Personagens ilustrados do convite">
+            <img
+              class="hero-character hero-character--hippo"
+              src="assets/hippo.png"
+              alt="Hipopótamo ilustrado usando jardineira azul."
+              width="331"
+              height="502"
+            />
+            <img
+              class="hero-character hero-character--giraffe"
+              src="assets/giraffe.png"
+              alt="Girafa ilustrada amarela com manchas marrons."
+              width="271"
+              height="496"
+            />
+            <img
+              class="hero-character hero-character--fox"
+              src="assets/fox.png"
+              alt="Raposa ilustrada usando vestido terracota."
+              width="259"
+              height="383"
+            />
+            <img
+              class="hero-character hero-character--dachshund"
+              src="assets/dachshund.png"
+              alt="Dachshund ilustrado de corpo comprido, em tons terracota."
+              width="603"
+              height="329"
+            />
+          </div>
+
+          <a class="button button--hero" href="#rsvp">
+            CONFIRMAR PRESENÇA
+            <span class="button__arrow" aria-hidden="true">↘</span>
+          </a>
+        </div>
       </header>
 
-      <section class="event-ribbon" aria-label="Informações principais">
-        <div class="event-ribbon__inner">
-          <div class="event-ribbon__item">
-            <span class="meta-label">data</span>
-            <strong>05 dezembro</strong>
-            <small>sábado</small>
-          </div>
-          <div class="event-ribbon__item">
-            <span class="meta-label">horário</span>
-            <strong>15h00</strong>
-            <small>chegue sem pressa</small>
-          </div>
-          <div class="event-ribbon__item">
-            <span class="meta-label">local</span>
-            <strong class="event-location-name">Espaço Quintal</strong>
-            <small class="event-location-city">São Paulo, SP</small>
-          </div>
+      <section class="event-details" aria-label="Data e local">
+        <p class="event-details__date">05 DE DEZEMBRO</p>
+        <div class="event-details__ornament" aria-hidden="true">
+          <img class="event-details__leaf" src="assets/decor/olive-sprig.png" alt="" />
+          <img class="event-details__sun" src="assets/decor/sun.png" alt="" />
+          <img class="event-details__cloud" src="assets/decor/cloud.png" alt="" />
         </div>
+        <h2 class="event-details__place">SÃO PAULO – SP</h2>
+        <p class="event-details__note">Local e horário serão definidos em breve.</p>
       </section>
 
       <section class="countdown" aria-labelledby="countdown-title">
-        <div class="countdown__inner">
-          <div class="section-heading section-heading--light">
-            <p class="eyebrow">está chegando</p>
-            <h2 id="countdown-title">Até a nossa tarde...</h2>
+        <p class="eyebrow">está chegando</p>
+        <h2 id="countdown-title">Até a nossa tarde...</h2>
+        <div class="countdown-grid" aria-label="Contagem regressiva">
+          <div class="countdown__unit">
+            <strong data-countdown="days">00</strong>
+            <span>DIAS</span>
           </div>
-          <div class="countdown-grid" aria-label="Contagem regressiva">
-            <div class="countdown__unit">
-              <strong data-countdown="days">00</strong>
-              <span>dias</span>
-            </div>
-            <div class="countdown__unit">
-              <strong data-countdown="hours">00</strong>
-              <span>horas</span>
-            </div>
-            <div class="countdown__unit">
-              <strong data-countdown="minutes">00</strong>
-              <span>minutos</span>
-            </div>
-            <div class="countdown__unit">
-              <strong data-countdown="seconds">00</strong>
-              <span>segundos</span>
-            </div>
+          <div class="countdown__unit">
+            <strong data-countdown="hours">00</strong>
+            <span>HORAS</span>
           </div>
-        </div>
-      </section>
-
-      <section class="message-section" aria-labelledby="message-title">
-        <div class="message-section__inner">
-          <div class="message-section__mark" aria-hidden="true">“</div>
-          <div>
-            <p class="eyebrow">uma celebração pequena, cheia de significado</p>
-            <h2 id="message-title">
-              O primeiro ano passa depressa. <em>Esse encontro fica.</em>
-            </h2>
-            <p class="message-section__body">
-              Preparamos uma tarde leve, com bolo, brincadeiras e gente querida
-              por perto. A presença de vocês vai deixar tudo ainda mais bonito.
-            </p>
+          <div class="countdown__unit">
+            <strong data-countdown="minutes">00</strong>
+            <span>MINUTOS</span>
           </div>
-        </div>
-      </section>
-
-      <section class="details-section" aria-labelledby="details-title">
-        <div class="details-section__inner">
-          <div class="details-section__visual" aria-hidden="true">
-            <span class="sun-detail"></span>
-            <span class="leaf-detail leaf-detail--one"></span>
-            <span class="leaf-detail leaf-detail--two"></span>
-            <span class="detail-number">01</span>
-          </div>
-
-          <div class="details-section__content">
-            <p class="eyebrow">anote com carinho</p>
-            <h2 id="details-title">Detalhes do encontro</h2>
-            <div class="detail-list">
-              <div class="detail-row">
-                <span class="detail-row__icon" aria-hidden="true">◷</span>
-                <div>
-                  <span class="meta-label">quando</span>
-                  <strong>05 de dezembro de 2026</strong>
-                  <p>Sábado, a partir das 15h</p>
-                </div>
-              </div>
-              <div class="detail-row">
-                <span class="detail-row__icon" aria-hidden="true">⌖</span>
-                <div>
-                  <span class="meta-label">onde</span>
-                  <strong class="event-location-name">Espaço Quintal</strong>
-                  <p id="event-address">Rua das Acácias, 120 · São Paulo, SP</p>
-                  <a
-                    href="https://www.google.com/maps/search/?api=1&amp;query=Espa%C3%A7o+Quintal%2C+Rua+das+Ac%C3%A1cias%2C+120%2C+S%C3%A3o+Paulo%2C+SP"
-                    class="text-link"
-                    data-map-link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >ver no Google Maps <span aria-hidden="true">↗</span></a>
-                </div>
-              </div>
-              <div class="detail-row">
-                <span class="detail-row__icon" aria-hidden="true">♡</span>
-                <div>
-                  <span class="meta-label">um lembrete</span>
-                  <strong>Venha confortável</strong>
-                  <p>O quintal é aberto e a festa foi pensada para os pequenos.</p>
-                </div>
-              </div>
-            </div>
+          <div class="countdown__unit">
+            <strong data-countdown="seconds">00</strong>
+            <span>SEGUNDOS</span>
           </div>
         </div>
       </section>
@@ -186,16 +126,12 @@
       <section class="rsvp-section" id="rsvp" aria-labelledby="rsvp-title">
         <div class="rsvp-section__inner">
           <div class="rsvp-intro">
-            <p class="eyebrow">até breve</p>
-            <h2 id="rsvp-title">Vem celebrar<br /><em>com a gente?</em></h2>
-            <p>
-              Conte para nós até <strong><time id="rsvp-deadline" datetime="2026-11-20">20 de novembro</time></strong>. Assim deixamos
-              tudo preparado para receber cada abraço.
+            <p class="eyebrow">com carinho</p>
+            <h2 id="rsvp-title">CONFIRMAR PRESENÇA</h2>
+            <p class="rsvp-deadline">
+              Conte para nós até
+              <strong><time id="rsvp-deadline" datetime="2026-11-20">20 de novembro</time></strong>.
             </p>
-            <div class="rsvp-intro__signature">
-              <span>com carinho,</span>
-              <strong>Pedro e família</strong>
-            </div>
           </div>
 
           <div class="rsvp-form-wrap">
@@ -210,6 +146,7 @@
                   autocomplete="off"
                 />
               </div>
+
               <div class="form-field">
                 <label for="guest-name">Seu nome</label>
                 <input
@@ -217,7 +154,7 @@
                   name="guest-name"
                   type="text"
                   autocomplete="name"
-                  placeholder="Como podemos chamar você?"
+                  placeholder="Nome completo"
                   required
                 />
               </div>
@@ -269,7 +206,7 @@
                 </div>
               </div>
 
-              <div class="form-field">
+              <div class="form-field form-field--note">
                 <label for="guest-note">Quer deixar um recado?</label>
                 <textarea
                   id="guest-note"
@@ -281,29 +218,31 @@
 
               <p class="form-helper" id="guest-helper">Você poderá ajustar as quantidades depois.</p>
               <p class="form-error" id="rsvp-error" role="alert" hidden></p>
-              <button class="button button--dark button--full" type="submit">
-                <span class="button__label">Enviar confirmação</span>
-                <span class="button__icon" aria-hidden="true">→</span>
+              <button class="button button--submit" type="submit">
+                <span class="button__label">CONFIRMAR PRESENÇA</span>
+                <span class="button__arrow" aria-hidden="true">→</span>
               </button>
               <p class="form-footnote">Sem cadastro. Leva menos de um minuto.</p>
             </form>
 
             <div class="success-panel" id="success-panel" tabindex="-1" hidden>
-              <span class="success-panel__icon" aria-hidden="true">✓</span>
+              <span class="success-panel__mark" aria-hidden="true">✳</span>
               <p class="eyebrow">recebemos sua resposta</p>
               <h3 id="success-title">Presença confirmada.</h3>
-              <p id="success-message">Será uma alegria ter vocês conosco nessa tarde.</p>
+              <p id="success-message">Será uma alegria comemorar esse dia com vocês!</p>
               <a href="#top" class="text-link">voltar ao convite <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         </div>
       </section>
 
-      <footer class="footer">
-        <p>Pedro <span aria-hidden="true">•</span> 1 ano</p>
-        <span>feito para guardar este dia</span>
-      </footer>
+      <section class="closing-message" aria-label="Mensagem final">
+        <span class="ornament ornament--star ornament--closing-star" aria-hidden="true"></span>
+        <p>Será uma alegria comemorar esse dia com vocês!</p>
+        <span class="ornament ornament--leaf ornament--closing-leaf" aria-hidden="true"></span>
+      </section>
     </main>
+
     <script src="event-config.js"></script>
     <script src="script.js"></script>
   </body>

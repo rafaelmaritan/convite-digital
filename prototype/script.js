@@ -8,24 +8,6 @@ deadlineElement.textContent = new Intl.DateTimeFormat('pt-BR', {
 }).format(deadlineDate);
 deadlineElement.dateTime = config.rsvpDeadline;
 
-document.querySelectorAll('.event-location-name').forEach((element) => {
-  element.textContent = config.location.name;
-});
-document.querySelectorAll('.event-location-city').forEach((element) => {
-  element.textContent = config.location.city;
-});
-document.querySelector('#event-address').textContent = `${config.location.address} · ${config.location.city}`;
-
-const mapSearchUrl = new URL('https://www.google.com/maps/search/');
-mapSearchUrl.searchParams.set('api', '1');
-mapSearchUrl.searchParams.set(
-  'query',
-  `${config.location.name}, ${config.location.address}, ${config.location.city}`,
-);
-const mapLink = document.querySelector('[data-map-link]');
-mapLink.href = mapSearchUrl.toString();
-mapLink.setAttribute('aria-label', `Abrir ${config.location.name} no Google Maps`);
-
 const eventDate = new Date('2026-12-05T15:00:00-03:00').getTime();
 const countdownElements = {
   days: document.querySelector('[data-countdown="days"]'),
@@ -116,12 +98,6 @@ renderCount('adults');
 renderCount('children');
 updateAttendanceState();
 
-const portrait = document.querySelector('.photo-frame');
-const portraitImage = portrait.querySelector('img');
-portraitImage.addEventListener('error', () => {
-  portrait.classList.add('photo-frame--fallback');
-});
-
 const form = document.querySelector('#rsvp-form');
 const successPanel = document.querySelector('#success-panel');
 const formError = document.querySelector('#rsvp-error');
@@ -172,7 +148,7 @@ form.addEventListener('submit', async (event) => {
       ? 'Presença confirmada.'
       : 'Resposta recebida.';
     document.querySelector('#success-message').textContent = attending
-      ? 'Será uma alegria ter vocês conosco nessa tarde.'
+      ? 'Será uma alegria comemorar esse dia com vocês!'
       : 'Obrigado por avisar. Sentiremos sua falta nessa tarde.';
     form.hidden = true;
     successPanel.hidden = false;
