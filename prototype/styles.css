@@ -346,6 +346,47 @@ textarea:focus-visible {
   letter-spacing: 0.18em;
 }
 
+.event-details__location {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  overflow-wrap: anywhere;
+}
+
+.event-details__address,
+.event-details__city {
+  margin: 8px 0 0;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.event-details__city {
+  margin-top: 2px;
+  color: var(--color-olive);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.event-details__map {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  margin-top: 10px;
+  padding: 7px 4px;
+  color: var(--color-terracotta);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.event-details__map:hover {
+  color: var(--color-text);
+}
+
 .event-details__ornament {
   display: flex;
   align-items: center;

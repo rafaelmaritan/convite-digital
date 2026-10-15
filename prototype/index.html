@@ -96,8 +96,21 @@
           <img class="event-details__sun" src="assets/decor/sun.png" alt="" />
           <img class="event-details__cloud" src="assets/decor/cloud.png" alt="" />
         </div>
-        <h2 class="event-details__place">SÃO PAULO – SP</h2>
-        <p class="event-details__note">Local e horário serão definidos em breve.</p>
+        <div class="event-details__location" aria-label="Local da festa">
+          <h2 class="event-details__place" id="event-location"></h2>
+          <p class="event-details__address" id="event-address"></p>
+          <p class="event-details__city" id="event-city"></p>
+          <a
+            class="event-details__map"
+            data-map-link
+            href="https://www.google.com/maps"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver localização no Google Maps
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </section>
 
       <section class="countdown" aria-labelledby="countdown-title">

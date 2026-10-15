@@ -1,4 +1,22 @@
 const config = window.invitationConfig;
+const eventLocation = document.querySelector('#event-location');
+const eventAddress = document.querySelector('#event-address');
+const eventCity = document.querySelector('#event-city');
+const mapLink = document.querySelector('[data-map-link]');
+
+eventLocation.textContent = config.location.name;
+eventAddress.textContent = config.location.address;
+eventCity.textContent = config.location.city;
+
+const mapUrl = new URL('https://www.google.com/maps/search/');
+mapUrl.searchParams.set('api', '1');
+mapUrl.searchParams.set(
+  'query',
+  `${config.location.name}, ${config.location.address}, ${config.location.city}`,
+);
+mapLink.href = mapUrl.toString();
+mapLink.setAttribute('aria-label', `Abrir ${config.location.name}, ${config.location.address}, ${config.location.city} no Google Maps`);
+
 const deadlineParts = config.rsvpDeadline.split('-').map(Number);
 const deadlineDate = new Date(deadlineParts[0], deadlineParts[1] - 1, deadlineParts[2], 12);
 const deadlineElement = document.querySelector('#rsvp-deadline');
