@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FDFBF6" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="Consolidação privada das respostas do aniversário do Pedro." />
+    <title>Confirmações · Pedro faz 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="organizer.css" />
+  </head>
+  <body>
+    <main class="organizer" aria-labelledby="page-title">
+      <header class="organizer__header">
+        <a class="organizer__back" href="index.html">← <span>Convite do Pedro</span></a>
+        <p class="eyebrow">Pedro · 1 ano</p>
+      </header>
+
+      <section class="organizer__intro">
+        <p class="eyebrow">organização da festa</p>
+        <h1 id="page-title">Confirmações</h1>
+        <p class="organizer__subtitle">Respostas recebidas para o dia 05 de dezembro.</p>
+        <p class="organizer__connection" id="connection-status" role="status">Carregando respostas...</p>
+      </section>
+
+      <section class="summary" aria-label="Resumo das respostas">
+        <article class="summary__item summary__item--primary">
+          <span>Confirmaram</span>
+          <strong data-total="confirmed">—</strong>
+        </article>
+        <article class="summary__item">
+          <span>Pessoas esperadas</span>
+          <strong data-total="people">—</strong>
+        </article>
+        <article class="summary__item">
+          <span>Adultos</span>
+          <strong data-total="adults">—</strong>
+        </article>
+        <article class="summary__item">
+          <span>Crianças</span>
+          <strong data-total="children">—</strong>
+        </article>
+        <article class="summary__item summary__item--declined">
+          <span>Não poderão ir</span>
+          <strong data-total="declined">—</strong>
+        </article>
+      </section>
+
+      <section class="responses" aria-labelledby="responses-title">
+        <div class="responses__heading">
+          <div>
+            <p class="eyebrow">lista de convidados</p>
+            <h2 id="responses-title">Respostas recebidas</h2>
+          </div>
+          <span class="responses__count" id="response-count">—</span>
+        </div>
+        <p class="responses__message" id="responses-message" aria-live="polite"></p>
+        <div class="responses__table-wrap">
+          <table class="responses__table">
+            <caption class="visually-hidden">RSVPs enviados pelos convidados</caption>
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Resposta</th>
+                <th scope="col">Adultos</th>
+                <th scope="col">Crianças</th>
+                <th scope="col">Enviada em</th>
+                <th scope="col">Observação</th>
+              </tr>
+            </thead>
+            <tbody id="responses-list"></tbody>
+          </table>
+        </div>
+        <p class="responses__privacy">Esta página é restrita aos organizadores. As respostas ainda não recebidas não aparecem como recusas.</p>
+      </section>
+    </main>
+    <script src="event-config.js"></script>
+    <script src="organizer.js"></script>
+  </body>
++</html>

@@ -1,4 +1,5 @@
 import os
+import hmac
 from collections import deque
 from collections.abc import Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -8,7 +9,7 @@ from threading import Lock
 from time import monotonic
 from zoneinfo import ZoneInfo
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
@@ -32,6 +33,7 @@ EVENT_MESSAGE = os.getenv(
     "EVENT_MESSAGE",
     "Um ano inteiro de descobertas, abraços e alegria. Vamos celebrar esse dia bonito juntos?",
 )
+ORGANIZER_API_KEY = os.getenv("ORGANIZER_API_KEY", "")
 RSVP_RATE_LIMIT_MAX_REQUESTS = int(os.getenv("RSVP_RATE_LIMIT_MAX_REQUESTS", "10"))
 RSVP_RATE_LIMIT_WINDOW_SECONDS = int(os.getenv("RSVP_RATE_LIMIT_WINDOW_SECONDS", "600"))
 if RSVP_RATE_LIMIT_MAX_REQUESTS < 1 or RSVP_RATE_LIMIT_WINDOW_SECONDS < 1:
@@ -178,3 +180,34 @@ def create_rsvp(
     session.commit()
     session.refresh(rsvp)
     return rsvp
+
+
+@app.get("/api/admin/events/{slug}/rsvps", response_model=list[RSVPRead])
+def list_event_rsvps(
+    slug: str,
+    response: Response,
+    organizer_key: str | None = Header(default=None, alias="X-Organizer-Key"),
+    session: Session = Depends(get_db),
+) -> list[RSVP]:
+    if len(ORGANIZER_API_KEY) < 32:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Consulta do organizador não está configurada.",
+        )
+
+    supplied_key = organizer_key or ""
+    if not hmac.compare_digest(supplied_key.encode("utf-8"), ORGANIZER_API_KEY.encode("utf-8")):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Acesso não autorizado.",
+        )
+
+    event = event_or_404(session, slug)
+    response.headers["Cache-Control"] = "private, no-store"
+    return list(
+        session.scalars(
+            select(RSVP)
+            .where(RSVP.event_id == event.id)
+            .order_by(RSVP.created_at.desc(), RSVP.id.desc())
+        ).all()
+    )

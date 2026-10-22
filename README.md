@@ -148,11 +148,11 @@ O convidado poderá informar:
 * observação;
 * prazo de confirmação configurável por evento.
 
-### Organizador — fora da primeira entrega
+### Organizador — acesso restrito
 
-O convite e o RSVP serão entregues primeiro. A página do organizador e a rota GET que listaria as respostas ficam adiadas; não publicar uma listagem pública de convidados nesta etapa.
+Uma página privada consolida confirmações, pessoas esperadas, adultos, crianças e recusas. Os convidados continuam enviando RSVP sem login; o organizador entra por Cloudflare Access.
 
-As respostas continuam sendo gravadas no banco e poderão ser consultadas quando a área do organizador for retomada com proteção de acesso.
+A API serve a lista apenas em `GET /api/admin/events/{slug}/rsvps`, protegida por uma chave server-to-server. A Pages Function valida a sessão JWT do Cloudflare Access e mantém essa chave fora do navegador. O antigo `GET /api/events/{slug}/rsvps` segue indisponível.
 
 ---
 
@@ -213,7 +213,7 @@ Depois transformar a solução em produto.
 
 ### Protótipo visual
 
-O protótipo em `prototype/` envia as confirmações à API FastAPI. O backend usa SQLite local por padrão; os dados ficam em `backend/rsvps.sqlite3`. A página do organizador e a listagem GET não fazem parte desta primeira entrega.
+O protótipo em `prototype/` envia as confirmações à API FastAPI. O backend usa SQLite local por padrão; os dados ficam em `backend/rsvps.sqlite3`. A página `prototype/organizer.html` é privada e, em produção, carrega por uma Pages Function protegida por Cloudflare Access.
 
 Inicie o backend em um terminal:
 
@@ -238,6 +238,8 @@ python -m http.server 4173 --directory prototype
 ```
 
 Abra `http://localhost:4173` para o convite. A URL da API e o slug do evento ficam em `prototype/event-config.js`.
+
+A página de confirmações está em `prototype/organizer.html`. Ela precisa das Pages Functions e variáveis de runtime do Cloudflare; o servidor estático Python mostra apenas a estrutura, não executa esse proxy. Em produção, acesse `/organizer.html` pelo domínio Pages depois de configurar Access e secrets.
 
 Os endpoints locais estão disponíveis em `http://localhost:8000`; a documentação interativa do FastAPI fica em `http://localhost:8000/docs`.
 
@@ -283,6 +285,12 @@ python -m pytest
 
 Os testes usam SQLite em memória e não alteram `backend/rsvps.sqlite3`.
 
+Os testes da Pages Function usam tokens Access simulados e não acessam serviços hospedados. Execute na raiz:
+
+```bash
+node --test deployment/organizer-proxy.test.mjs
+```
+
 ---
 
 ## Variáveis de ambiente
@@ -326,6 +334,14 @@ POST /api/events/{slug}/rsvps
 
 O endpoint retorna `201 Created` e o RSVP persistido.
 Um envio que aciona o honeypot recebe uma confirmação genérica `202 Accepted`, sem gravar dados. Excesso de tentativas retorna `429 Too Many Requests`.
+
+### Consultar RSVPs (organizadores)
+
+```http
+GET /api/admin/events/{slug}/rsvps
+```
+
+Disponível somente para a Pages Function, com `X-Organizer-Key`. Não disponibilizar esta rota diretamente ao navegador nem remover sua autenticação.
 
 ---
 

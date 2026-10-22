@@ -235,7 +235,7 @@ O MVP pode ser simples, mas:
 
 O RSVP público não exige login, mas deve validar os dados, usar honeypot e limitar tentativas.
 
-Na primeira entrega, não implementar nem expor uma rota GET para listar RSVPs ou uma página do organizador. Quando essa consulta for adicionada, protegê-la com Cloudflare Access ou mecanismo equivalente.
+Não expor uma rota GET pública para listar RSVPs. A consulta do organizador usa `GET /api/admin/events/{slug}/rsvps`, exige `X-Organizer-Key` server-to-server e só pode ser chamada por uma Pages Function depois de validar o JWT do Cloudflare Access (issuer, audience, expiração e e-mail permitido). Proteger `/organizer.html` e `/api/admin/*` com Access sem proteger o convite público.
 
 O rate limit atual em memória é de 10 tentativas por IP em 10 minutos e serve apenas para uma instância simples; antes de escalar ou operar em múltiplas instâncias, usar um limitador compartilhado ou uma proteção de borda. Não confiar diretamente em cabeçalhos de IP encaminhado sem configurar proxies confiáveis.
 

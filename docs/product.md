@@ -189,7 +189,7 @@ A data limite para responder deve ser configurável por evento e exibida na pág
 
 ## Consulta do organizador
 
-Fica fora da primeira entrega. Quando for retomada, a visão do organizador deve resumir as respostas recebidas:
+A visão do organizador é restrita e resume as respostas recebidas:
 
 * quantidade de RSVPs confirmados (`attending = true`);
 * quantidade de pessoas esperadas, somando adultos e crianças apenas de quem confirmou;
@@ -322,17 +322,15 @@ Cria uma confirmação.
 
 ## Administração
 
-Fora da primeira entrega; implementar somente quando a página do organizador for retomada e protegida.
-
 ### GET
 
 ```http
-GET /api/events/{slug}/rsvps
+GET /api/admin/events/{slug}/rsvps
 ```
 
 Retorna os RSVPs do evento.
 
-Essa rota e a página do organizador não devem ser implementadas ou publicadas na primeira entrega. Quando forem adicionadas, proteger a leitura dos RSVPs com Cloudflare Access ou mecanismo equivalente; não disponibilizar os dados pessoais por uma rota pública.
+Essa rota requer `X-Organizer-Key` e só é chamada server-to-server pela Pages Function depois de validar JWT, emissor, audience e e-mail permitido do Cloudflare Access. Não disponibilizar os dados pessoais por uma rota pública. A página `/organizer.html` deve estar sob Access e retornar `Cache-Control: private, no-store` nos dados.
 
 ---
 

@@ -108,7 +108,7 @@ Prioridade:
 
 # FASE 4 — Integração
 
-O protótipo estático já envia RSVPs à API local. A listagem dos registros e a página do organizador não fazem parte da primeira entrega. A integração Angular permanece para a etapa do frontend.
+O protótipo estático envia RSVPs à API local. A integração Angular permanece para outra etapa.
 
 O POST público já valida os campos, usa honeypot e limita tentativas em memória por IP. Antes de múltiplas instâncias, adicionar proteção de borda ou um limitador compartilhado.
 
@@ -123,23 +123,26 @@ Os testes automatizados da API ficam em `backend/tests/test_rsvps.py`; execute-o
 
 ---
 
-# FASE 5 — Consulta do organizador (adiada)
+# FASE 5 — Consulta do organizador
 
-Retomar depois da primeira entrega. Antes de expor a leitura, proteger a página e a rota da API com Cloudflare Access ou mecanismo equivalente.
+Implementada no protótipo via `prototype/organizer.html`, `functions/api/admin/events/[slug]/rsvps.js` e `GET /api/admin/events/{slug}/rsvps`. A página não é pública: a configuração de Cloudflare Access e secrets de produção ainda deve ser concluída e testada no painel.
 
-- [ ] Criar página de RSVPs
-- [ ] Mostrar total de confirmações
-- [ ] Mostrar total de adultos
-- [ ] Mostrar total de crianças
-- [ ] Mostrar total de recusas
-- [ ] Mostrar lista de convidados
-- [ ] Mostrar observações
+- [x] Criar página de RSVPs
+- [x] Mostrar total de confirmações
+- [x] Mostrar total de adultos
+- [x] Mostrar total de crianças
+- [x] Mostrar total de recusas
+- [x] Mostrar lista de convidados
+- [x] Mostrar observações
+- [ ] Configurar Cloudflare Access para os paths privados sem proteger o convite público
+- [ ] Configurar secrets no Railway e Cloudflare Pages
+- [ ] Testar a página como organizador e como visitante sem autenticação
 
 ---
 
 # FASE 6 — Deploy
 
-O scaffold local está preparado em `backend/railway.toml` e `deployment/build-prototype.mjs`; o roteiro está em `deployment/README.md`. Ainda falta criar/enviar o repositório remoto, configurar os serviços e variáveis reais e validar os domínios gratuitos. Domínio próprio pode ficar para depois.
+O scaffold local está preparado em `backend/railway.toml` e `deployment/build-prototype.mjs`; o roteiro está em `deployment/README.md`. O repositório, a API Railway e o Pages já estão conectados. Falta concluir a configuração Access/secrets e validar a página privada publicada. Domínio próprio pode ficar para depois.
 
 ## Backend
 

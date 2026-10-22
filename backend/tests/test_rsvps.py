@@ -130,6 +130,67 @@ def test_rsvp_list_get_is_not_available_in_first_delivery(client: TestClient) ->
     assert response.status_code == 405
 
 
+def test_admin_rsvp_list_is_disabled_without_configured_key(
+    client: TestClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(main, "ORGANIZER_API_KEY", "")
+
+    response = client.get("/api/admin/events/pedro-1-ano/rsvps")
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Consulta do organizador não está configurada."
+
+
+def test_admin_rsvp_list_rejects_missing_or_wrong_key(
+    client: TestClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(main, "ORGANIZER_API_KEY", "test-organizer-key-with-32-chars-min")
+
+    missing = client.get("/api/admin/events/pedro-1-ano/rsvps")
+    wrong = client.get(
+        "/api/admin/events/pedro-1-ano/rsvps",
+        headers={"X-Organizer-Key": "wrong-key"},
+    )
+
+    assert missing.status_code == 401
+    assert wrong.status_code == 401
+
+
+def test_admin_rsvp_list_returns_records_with_valid_key(
+    client: TestClient,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    organizer_key = "test-organizer-key-with-32-chars-min"
+    monkeypatch.setattr(main, "ORGANIZER_API_KEY", organizer_key)
+    with SessionLocal() as session:
+        event = session.scalar(select(Event).where(Event.slug == "pedro-1-ano"))
+        assert event is not None
+        session.add(
+            RSVP(
+                event_id=event.id,
+                name="Ana Silva",
+                attending=True,
+                adults=2,
+                children=1,
+                message="Vamos levar um bolo?",
+            )
+        )
+        session.commit()
+
+    response = client.get(
+        "/api/admin/events/pedro-1-ano/rsvps",
+        headers={"X-Organizer-Key": organizer_key},
+    )
+
+    assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "private, no-store"
+    assert response.json()[0]["name"] == "Ana Silva"
+    assert response.json()[0]["adults"] == 2
+    assert response.json()[0]["children"] == 1
+
+
 def test_rsvp_after_event_deadline_is_rejected(client: TestClient) -> None:
     with SessionLocal() as session:
         event = session.scalar(select(Event).where(Event.slug == "pedro-1-ano"))

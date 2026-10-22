@@ -9,7 +9,8 @@ Railway e Cloudflare Pages precisam de um repositório Git remoto para fazer dep
 ## Escopo e cautelas
 
 - A API mantém público apenas o envio de RSVP e o health check.
-- Não há rota para listar respostas nem página do organizador nesta entrega.
+- A consolidação fica em `/organizer.html`; sua leitura exige Cloudflare Access.
+- A lista só é entregue pela rota administrativa com chave server-to-server; o antigo GET público continua indisponível.
 - A configuração de exemplo do evento deve ser substituída pelos dados reais antes de compartilhar o link.
 - O limite local é em memória e atende somente um processo simples. Não aumente as réplicas Railway sem mover o rate limit para a borda ou um armazenamento compartilhado.
 - Não copie o arquivo SQLite local para produção. O banco PostgreSQL Railway começa com os dados de evento configurados por ambiente e sem os RSVPs de teste locais.
@@ -38,6 +39,7 @@ Railway e Cloudflare Pages precisam de um repositório Git remoto para fazer dep
 | `EVENT_RSVP_DEADLINE` | Prazo real no formato `YYYY-MM-DD` |
 | `RSVP_RATE_LIMIT_MAX_REQUESTS` | `10` |
 | `RSVP_RATE_LIMIT_WINDOW_SECONDS` | `600` |
+| `ORGANIZER_API_KEY` | Secret aleatório com pelo menos 32 caracteres; configurar também como Secret no Pages, sem enviar ao browser |
 
 5. A API já está publicada em `https://convite-digital-production.up.railway.app`; o health check foi validado com `200 OK` em `https://convite-digital-production.up.railway.app/api/health`.
 
@@ -73,6 +75,60 @@ O build exige todos esses valores para evitar publicar a URL local ou dados de e
 5. Confirme que uma solicitação de outro site não recebe `Access-Control-Allow-Origin` e que `GET /api/events/pedro-1-ano/rsvps` continua indisponível (`405`).
 6. Antes de compartilhar publicamente, revise o limite no ambiente hospedado e configure rate limiting de borda adequado. O rate limit em memória não substitui uma proteção de produção.
 
-## 4. Domínio próprio (opcional, depois do teste)
+## 4. Configurar a consolidação privada
+
+Os convidados não fazem login. Somente o organizador precisa autenticar-se para ler os RSVPs.
+
+### 4.1 Criar a chave server-to-server
+
+Gere uma chave localmente, sem colá-la no Git ou em mensagens:
+
+```bash
+openssl rand -hex 32
+```
+
+Configure o mesmo resultado como **Secret** `ORGANIZER_API_KEY` em Railway (API) e Cloudflare Pages (runtime Production). O backend recusa chamadas sem essa chave e usa comparação em tempo constante.
+
+No Pages, adicione a chave em **Settings > Variables and Secrets** e marque como Secret. Ela não é uma variável de build e nunca deve aparecer em `event-config.js`, HTML, JavaScript público ou no Git.
+
+### 4.2 Configurar Access por path
+
+Em **Zero Trust → Access controls → Applications**, crie aplicações self-hosted com uma policy **Allow** restrita ao seu e-mail:
+
+- Host do Pages + path `/organizer.html`.
+- Host do Pages + path `/api/admin/*`.
+
+Use um login por e-mail/código ou o IdP disponível. Mantenha a raiz `/` fora dessas aplicações para o convite continuar público. **Não aplique Access ao host inteiro**: isso também pediria login aos convidados.
+
+O Pages oferece um ajuste específico para `*.pages.dev`. Verifique no painel o host/path efetivamente protegido. Se o Pages/Access só permitir bloquear o host completo na sua configuração, não aplique essa regra ao domínio público do convite; use um domínio próprio com policy por path ou um projeto/host separado para o organizador.
+
+A pasta `functions/` permanece na raiz do repositório, ao lado de `prototype/` e `deployment/`; Pages a detecta automaticamente. Não a mova para `deployment/dist`.
+
+### 4.3 Variáveis de runtime do Pages
+
+Em **Pages → Settings → Variables and Secrets**, configure para Production:
+
+| Nome | Valor |
+| --- | --- |
+| `RSVP_API_BASE_URL` | `https://convite-digital-production.up.railway.app` |
+| `ORGANIZER_API_KEY` | O mesmo secret aleatório configurado na API Railway |
+| `ACCESS_TEAM_DOMAIN` | `https://<seu-time>.cloudflareaccess.com` |
+| `ACCESS_AUDIENCE` | AUD da aplicação Access que protege `/api/admin/*` |
+| `ORGANIZER_EMAIL` | Seu e-mail autorizado, em minúsculas |
+
+`ACCESS_TEAM_DOMAIN`, `ACCESS_AUDIENCE` e `ORGANIZER_EMAIL` são usados no runtime da Pages Function. `ORGANIZER_API_KEY` é Secret e nunca deve entrar em `event-config.js`, HTML ou JavaScript público. Salve as variáveis e faça redeploy do Pages.
+
+### 4.4 Validar a proteção e os totais
+
+1. Abra `/organizer.html` sem autenticação: Access deve pedir login.
+2. Entre com o e-mail permitido: a página deve carregar as respostas.
+3. Acesse diretamente `https://convite-digital-production.up.railway.app/api/admin/events/pedro-1-ano/rsvps` sem `X-Organizer-Key`: deve retornar `401` (ou `503` se a chave ainda não foi configurada), nunca dados.
+4. Confira que o pedido ao Railway feito pela Pages Function contém a chave apenas server-side e que a resposta é `Cache-Control: private, no-store`.
+5. Abra a raiz pública do Pages em janela anônima: o convite e o POST de RSVP devem continuar acessíveis sem login.
+6. Confirme que `GET /api/events/pedro-1-ano/rsvps` continua retornando `405`.
+
+O proxy valida a assinatura RS256 do JWT de Access via JWKS, além de issuer, audience, validade e e-mail autorizado. O Railway também exige a chave compartilhada, então a URL pública do Railway não permite contornar o Access.
+
+## 5. Domínio próprio (opcional, depois do teste)
 
 Depois de validar os domínios gratuitos, configure um domínio próprio em Cloudflare Pages. Atualize `CORS_ORIGINS` na API com a nova origem exata e gere um novo deploy. Não é necessário ter domínio próprio para validar o fluxo primeiro.
