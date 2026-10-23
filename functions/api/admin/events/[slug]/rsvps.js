@@ -174,8 +174,10 @@ export async function onRequestGet(context) {
     apiUrl,
   );
 
+  let upstream;
+  let records;
   try {
-    const upstream = await fetch(endpoint, {
+    upstream = await fetch(endpoint, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -185,21 +187,29 @@ export async function onRequestGet(context) {
       redirect: "error",
     });
 
-    if (!upstream.ok) {
-      const status = upstream.status === 404 ? 404 : 502;
-      const detail = status === 404
-        ? "Evento não encontrado."
-        : "Não foi possível carregar as confirmações.";
-      return jsonResponse({ detail }, status);
+    if (upstream.ok) {
+      records = await upstream.json();
     }
-
-    const records = await upstream.json();
-    if (!Array.isArray(records)) {
-      return jsonResponse({ detail: "Resposta inválida do serviço de confirmações." }, 502);
-    }
-
-    return jsonResponse(records, 200);
-  } catch {
+  } catch (error) {
+    console.error("Organizer RSVP proxy upstream failure", {
+      stage: upstream ? "parse" : "fetch",
+      errorName: error instanceof Error ? error.name : "UnknownError",
+      upstreamStatus: upstream?.status ?? null,
+    });
     return jsonResponse({ detail: "Serviço de confirmações indisponível." }, 502);
   }
+
+  if (!upstream.ok) {
+    const status = upstream.status === 404 ? 404 : 502;
+    const detail = status === 404
+      ? "Evento não encontrado."
+      : "Não foi possível carregar as confirmações.";
+    return jsonResponse({ detail }, status);
+  }
+
+  if (!Array.isArray(records)) {
+    return jsonResponse({ detail: "Resposta inválida do serviço de confirmações." }, 502);
+  }
+
+  return jsonResponse(records, 200);
 }

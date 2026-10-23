@@ -148,3 +148,35 @@ test('validates Access JWT and forwards the private key only to Railway', async 
     globalThis.fetch = originalFetch;
   }
 });
+
+test('logs upstream fetch failures without exposing the organizer key', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalConsoleError = console.error;
+  const logs = [];
+  globalThis.fetch = async (input) => {
+    const url = new URL(String(input));
+    if (url.pathname === '/cdn-cgi/access/certs') {
+      return Response.json({ keys: [accessJwk] });
+    }
+    throw new TypeError('upstream connection failed');
+  };
+  console.error = (...args) => logs.push(args);
+
+  try {
+    const token = await createAccessToken();
+    const response = await onRequestGet(createContext({ token }));
+
+    assert.equal(response.status, 502);
+    assert.deepEqual(await response.json(), {
+      detail: 'Serviço de confirmações indisponível.',
+    });
+    assert.deepEqual(logs, [[
+      'Organizer RSVP proxy upstream failure',
+      { stage: 'fetch', errorName: 'TypeError', upstreamStatus: null },
+    ]]);
+    assert.equal(JSON.stringify(logs).includes(organizerApiKey), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+    console.error = originalConsoleError;
+  }
+});
