@@ -191,9 +191,18 @@ export async function onRequestGet(context) {
       records = await upstream.json();
     }
   } catch (error) {
+    const sanitizeMessage = (message) => String(message)
+      .replaceAll(organizerApiKey, "[redacted]")
+      .slice(0, 160);
+    const cause = error instanceof Error && error.cause instanceof Error
+      ? error.cause
+      : null;
     console.error("Organizer RSVP proxy upstream failure", {
       stage: upstream ? "parse" : "fetch",
       errorName: error instanceof Error ? error.name : "UnknownError",
+      errorMessage: error instanceof Error ? sanitizeMessage(error.message) : "Unknown error",
+      causeName: cause?.name ?? null,
+      causeMessage: cause ? sanitizeMessage(cause.message) : null,
       upstreamStatus: upstream?.status ?? null,
     });
     return jsonResponse({ detail: "Serviço de confirmações indisponível." }, 502);

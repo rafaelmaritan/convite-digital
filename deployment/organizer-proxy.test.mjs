@@ -158,7 +158,7 @@ test('logs upstream fetch failures without exposing the organizer key', async ()
     if (url.pathname === '/cdn-cgi/access/certs') {
       return Response.json({ keys: [accessJwk] });
     }
-    throw new TypeError('upstream connection failed');
+    throw new TypeError(`upstream connection failed: ${organizerApiKey}`);
   };
   console.error = (...args) => logs.push(args);
 
@@ -172,7 +172,14 @@ test('logs upstream fetch failures without exposing the organizer key', async ()
     });
     assert.deepEqual(logs, [[
       'Organizer RSVP proxy upstream failure',
-      { stage: 'fetch', errorName: 'TypeError', upstreamStatus: null },
+      {
+        stage: 'fetch',
+        errorName: 'TypeError',
+        errorMessage: 'upstream connection failed: [redacted]',
+        causeName: null,
+        causeMessage: null,
+        upstreamStatus: null,
+      },
     ]]);
     assert.equal(JSON.stringify(logs).includes(organizerApiKey), false);
   } finally {
