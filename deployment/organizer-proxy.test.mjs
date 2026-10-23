@@ -114,7 +114,11 @@ test('validates Access JWT and forwards the private key only to Railway', async 
   const calls = [];
   globalThis.fetch = async (input, init = {}) => {
     const url = new URL(String(input));
-    calls.push({ url, headers: new Headers(init.headers) });
+    calls.push({
+      url,
+      headers: new Headers(init.headers),
+      redirect: init.redirect,
+    });
     if (url.pathname === '/cdn-cgi/access/certs') {
       return Response.json({ keys: [accessJwk] });
     }
@@ -143,6 +147,7 @@ test('validates Access JWT and forwards the private key only to Railway', async 
     assert.equal(calls.length, 2);
     assert.equal(calls[1].url.href, `${apiBaseUrl}/api/admin/events/pedro-1-ano/rsvps`);
     assert.equal(calls[1].headers.get('X-Organizer-Key'), organizerApiKey);
+    assert.equal(calls[1].redirect, 'manual');
     assert.equal(calls[0].headers.has('X-Organizer-Key'), false);
   } finally {
     globalThis.fetch = originalFetch;

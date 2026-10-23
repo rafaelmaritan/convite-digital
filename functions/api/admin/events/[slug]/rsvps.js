@@ -184,7 +184,7 @@ export async function onRequestGet(context) {
         "X-Organizer-Key": organizerApiKey,
       },
       cache: "no-store",
-      redirect: "error",
+      redirect: "manual",
     });
 
     if (upstream.ok) {
